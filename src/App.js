@@ -4,13 +4,13 @@ import './App.css';
 import LoginComponent from './components/login';
 import HomeComponent from './components/home';
 import { ROUTE_IMG_BACKGROUND } from './constants/constants';
-import { login, handleUserInfo } from './redux/actions';
+import { login, handleUserInfo, showOptions } from './redux/actions';
 
 class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+		this.state = {};
   }
 
   componentDidMount() {
@@ -29,14 +29,18 @@ class App extends Component {
 		return null;
 	}
 
+	showOptionsPublications = () => { return this.props.showOptionsPublications(); }
+	selectOption = (option) => {return console.log(option)}
   render() {
-    const { user, isValid } = this.props;
+    const { user, isValid, showOptions } = this.props;
 
 		console.log(this.props)
     return (
-      <div className="App" style={{backgroundImage: `url(${ROUTE_IMG_BACKGROUND})`}}>
+			<div className="App" 
+			// style={{backgroundImage: `url(${ROUTE_IMG_BACKGROUND})`}}
+			>
 				<LoginComponent validateUser={this.loginUser} isValid={isValid} user={user} handleChange={this.handleChange} userName={user.userName} password={user.password} />
-				<HomeComponent isValid={isValid}/>
+				<HomeComponent isValid={isValid} showOptions={showOptions} toggleOptions={this.showOptionsPublications} selectOption={this.selectOption}/>
   		</div>
   );  
 }
@@ -46,7 +50,8 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.auth.user,
-    isValid: state.auth.isValid,
+		isValid: state.auth.isValid,
+		showOptions: state.auth.showOptions
   } 
 }
 
@@ -54,7 +59,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
   	loginUser: () => { dispatch(login()) },
     handleChange: (value, id) => { dispatch(handleUserInfo(value, id)) },
-    // saveComment: (comment) => { dispatch(addComment(comment)) },
+    showOptionsPublications: () => { dispatch(showOptions()) },
     // deleteComment: (comment, index) => { dispatch(deleteComment(comment, index)) },
     // getComments: (comments) => { dispatch(getComments(comments)) }
   }

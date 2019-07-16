@@ -1,4 +1,7 @@
-import { LOGIN_ACTION } from "../../constants/actions";
+import { 
+        LOGIN_ACTION,
+        HOME_ACTION
+} from "../../constants/actions";
 
 export const login = () => {
   return {
@@ -14,9 +17,14 @@ export const handleUserInfo = (value, id) => {
   }
 }
 
-// export const handlePassword = (password) => {
-//   return {
-//     type: LOGIN_ACTION.LOGIN_ACTION_HANDLE_PASSWORD,
-//     password
-//   }
-// }
+export const showOptions = () => {
+  return {
+    type: HOME_ACTION.HOME_ACTION_SHOW_OPTIONS
+  }
+}
+
+export const resetValues = () => {
+  return {
+    type: ''
+  }
+}

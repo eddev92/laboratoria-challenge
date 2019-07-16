@@ -1,4 +1,4 @@
-import { LOGIN_ACTION } from "../../constants/actions";
+import { LOGIN_ACTION, HOME_ACTION } from "../../constants/actions";
 
 let defaultState = {
   user: {
@@ -6,6 +6,7 @@ let defaultState = {
     password: ''
   },
   isValid: false,
+  showOptions: false
 }
 
 const auth = (state = defaultState, action) => {
@@ -25,9 +26,13 @@ const auth = (state = defaultState, action) => {
        return {
          ...state,
         user: userAux
-               }
+        }
       } 
-
+    case HOME_ACTION.HOME_ACTION_SHOW_OPTIONS:
+      return {
+        ...state,
+        showOptions: !state.showOptions
+      }
     default:
       return state
   }
