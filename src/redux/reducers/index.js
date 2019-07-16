@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
-import comments from '../reducers/comments'
+import auth from './login'
 
 const riqraApp = combineReducers({
-  comments,
+  auth,
 })
 
 export default riqraApp
