@@ -1,10 +1,14 @@
 import React from 'react';
 import '../../../styles/select.css';
 
-const SelectComponent = ({ showOptions = false, toggleOptions = () => {}, selectOption = () => {} }) => {
+const SelectComponent = ({ showOptions = false, toggleOptions = () => {}, selectOption = () => {}, optionSelected = 0 }) => {
     return (
         <div className="main-select">
-          <a role="button" className={showOptions ? 'col-3 private active' : 'col-3 private'} onClick={toggleOptions}>Publico</a>
+          <a role="button" className={showOptions ? 'col-3 private active' : 'col-3 private'} onClick={toggleOptions}>
+            {optionSelected === 1 && 'Publico'}
+            {optionSelected === 2 && 'Amigos'}
+            {optionSelected === 3 && 'Solo yo'}
+          </a>
           <div className={showOptions ? 'private-list-options active' : 'private-list-options'}>
             <ul>
               <li className="" onClick={selectOption.bind(this, 1)}>Publico</li>

@@ -177,3 +177,8 @@ button.shared {
   padding: 15px;
   color: black;
 }
+.all-publications {
+  border: none !important;
+  box-shadow: none !important;
+  background-color: transparent;
+}

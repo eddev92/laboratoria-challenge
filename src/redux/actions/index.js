@@ -28,3 +28,33 @@ export const resetValues = () => {
     type: ''
   }
 }
+
+export const selectOption = (option) => {
+  return {
+    type: HOME_ACTION.HOME_ACTION_SELECT_OPTION,
+    option
+  }
+}
+
+export const handlePublication = (value) => {
+  return {
+    type: HOME_ACTION.HOME_ACTION_HANDLE_PUBLICATION,
+    value
+  }
+}
+
+export const addPublication = (publication, privacity) => {
+  return {
+    type: HOME_ACTION.HOME_ACTION_ADD_PUBLICATION,
+    publication,
+    privacity
+  }
+}
+
+export const deletePublication = (publication) => {
+  console.log(publication)
+  return {
+    type: HOME_ACTION.HOME_ACTION_DELETE_PUBLICATION,
+    publication
+  }
+}
