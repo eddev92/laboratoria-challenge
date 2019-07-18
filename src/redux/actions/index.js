@@ -52,7 +52,6 @@ export const addPublication = (publication) => {
 }
 
 export const deletePublication = (publication) => {
-  console.log(publication)
   return {
     type: HOME_ACTION.HOME_ACTION_DELETE_PUBLICATION,
     publication

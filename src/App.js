@@ -33,8 +33,8 @@ class App extends Component {
 			alert('Publicacion ya existe');
 			return this.props.resetErrorSavePublication();
 		}
-		if (this.props.publications && this.props.publications.length === 0) {
-			// return	this.props.resetEditPublication();
+		if (this.props.editActive && this.props.publications && this.props.publications.length === 0) {
+			return this.props.resetEditPublication();
 		}
 		if (this.props.publicationSelected && this.props.publications.length === 0) {
 			
@@ -74,7 +74,7 @@ class App extends Component {
 	}
 	
 	sharePublication = () => {
-		const { publication, publicationMessage, optionSelected } = this.props;
+		const { publication, publicationMessage } = this.props;
 
 		if (publicationMessage) {
 			return this.props.addPublication(publication);
@@ -92,17 +92,19 @@ class App extends Component {
 	}
 	updatePublication = () => {
 		const { messageForPublicationSelected, optionSelected } = this.props;
-		const body = {
-			message: messageForPublicationSelected,
-			privacity: optionSelected
+		if (messageForPublicationSelected) {
+			const body = {
+				message: messageForPublicationSelected,
+				privacity: optionSelected
+			}
+			this.props.updatePublication(body)
+			return this.props.resetEditPublication();
+
 		}
-		console.log('editar publicacion}')
-		this.props.updatePublication(body)
-		return this.props.resetEditPublication();
+		return alert('Campo comentario es requerido!')
 	}
   render() {
     const { editActive, publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected } = this.props;
-		console.log(this.props)
 
     return (
 			<div className="App" 

@@ -22,7 +22,6 @@ let defaultState = {
 }
 
 const auth = (state = defaultState, action) => {
-  console.log(action)
   switch (action.type) {
     case LOGIN_ACTION.LOGIN_ACTION_LOGIN_USER:
       return {
@@ -98,15 +97,14 @@ const auth = (state = defaultState, action) => {
     }
     case HOME_ACTION.HOME_ACTION_EDIT_PUBLICATION: {
       const lastPublication = { ...state.publication };
-      console.log(lastPublication, 'lastPublication')
       lastPublication.message = action.publicationSelected.message;
       lastPublication.privacity = action.publicationSelected.privacity;
+      
       return {
         ...state,
         publicationSelected: true,
         editActive: true,
         publication: lastPublication,
-        // publicationMessage: lastPublication.message,
         messageForPublicationSelected: lastPublication.message,
         optionSelected: lastPublication.privacity,
       }
@@ -127,7 +125,8 @@ const auth = (state = defaultState, action) => {
       publication: lastPublication,
       optionSelected: 1,
       publicationMessage: '',
-      messageForPublicationSelected: result ? auxMessage : ''
+      messageForPublicationSelected: result ? auxMessage : '',
+      // editActive: !result
 
     }
   }
