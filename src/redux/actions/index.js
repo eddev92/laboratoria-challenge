@@ -78,10 +78,9 @@ export const resetErrorSavePublication = () => {
   }
 }
 
-export const updatePublication = (newMessage, newPrivacity) => {
+export const updatePublication = (publication) => {
   return {
     type: HOME_ACTION.HOME_ACTION_UPDATE_PUBLICATION,
-    newMessage,
-    newPrivacity
+    publication
   }
 }

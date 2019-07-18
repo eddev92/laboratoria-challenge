@@ -56,7 +56,7 @@ const auth = (state = defaultState, action) => {
         publicationMessage: action.value,
         messageForPublicationSelected: action.value,
         privacityForPublicationSelected: state.optionSelected,
-        // publicationSelected: (action.value === state.publicationMessage)
+        publicationSelected: false
       }
     case HOME_ACTION.HOME_ACTION_ADD_PUBLICATION: {
       let auxPublications = [ ...state.publications ];
@@ -65,17 +65,14 @@ const auth = (state = defaultState, action) => {
         message: state.publicationMessage,
         privacity: state.optionSelected
       }
-if (auxPublications.length > 0) {
+// if (auxPublications.length > 0) {
         auxPublications.forEach(pub => {
           if (pub.message === bodyPublication.message && pub.privacity === bodyPublication.privacity) {
             result = true;
         } else {          
           result = false;
-          }       
-        })        
-      } else if (auxPublications.length === 0) {
-        result = false;
-      }
+          }
+        })
       if (!result) auxPublications.push(bodyPublication);
       return {
         ...state,
@@ -132,8 +129,8 @@ if (auxPublications.length > 0) {
   case HOME_ACTION.HOME_ACTION_UPDATE_PUBLICATION: {
     const publicationAux = { ...state.publication };
 
-    publicationAux.message = action.newMessage;
-    publicationAux.privacity = action.newPrivacity;
+    publicationAux.message = action.publication.message;
+    publicationAux.privacity = action.publication.privacity;
     const publications = state.publications.map(pub => {
       if (pub.message === publicationAux.message && pub.privacity === publicationAux.privacity) {
         console.log('publicacion actualizada')

@@ -21,8 +21,7 @@ const HomeComponent = ({ publicationMessage, isValid, showOptions = false, toggl
                   publicationSelected || !publicationMessage) ? 'col-3 shared disabled' : 'col-3 shared'
                 }
                   onClick={sharePublication}
-                  disabled={(messageForPublicationSelected === publication.message && privacityForPublicationSelected === publication.privacity) || 
-                    publicationSelected || !publicationMessage}>{publicationSelected ? 'Actualizar' : 'Compartir'}</button>
+                  disabled={publicationSelected}>{publicationSelected ? 'Actualizar' : 'Compartir'}</button>
             </div>
         </div>
       </div>

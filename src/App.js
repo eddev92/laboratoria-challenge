@@ -33,9 +33,9 @@ class App extends Component {
 			alert('Publicacion ya existe');
 			return this.props.resetErrorSavePublication();
 		}
-		 if (this.props.publication.message !== this.props.messageForPublicationSelected) {
-		 	return	this.props.resetOptionSelected();
-		 }
+		//  if (this.props.publication.message !== this.props.messageForPublicationSelected) {
+		//  	return	this.props.resetOptionSelected();
+		//  }
 		if (this.props.publicationSelected && this.props.publications.length === 0) {
 			return	this.props.resetValues();
 		}
@@ -51,6 +51,7 @@ class App extends Component {
 	}
 	handleChange = (e) => {
 		if (e) {
+			this.props.resetOptionSelected();
 			const value = e.target.value;
 			const id = e.target.id;
 			return this.props.handleChange(value, id);
@@ -70,13 +71,13 @@ class App extends Component {
 	}
 	
 	sharePublication = () => {
-		const { publication, publicationSelected, messageForPublicationSelected, optionSelected } = this.props;
+		const { publication, publicationSelected, messageForPublicationSelected, optionSelected, privacityForPublicationSelected, publications } = this.props;
 		const body = {
 			message: messageForPublicationSelected,
 			privacity: optionSelected
 		}
 
-		if (publicationSelected) return this.props.updatePublication();
+		// if (publicationSelected && publications && publications.length && (messageForPublicationSelected !== publication.message || privacityForPublicationSelected !== publication.privacity)) return this.props.updatePublication(body);
 		if (publication) return this.props.addPublication(publication);
 		// return null;
 	}
@@ -89,7 +90,9 @@ class App extends Component {
 	editPublication = (publicationSelected) => {
 		return this.props.editPublication(publicationSelected);
 	}
+	updatePublication = () => {
 
+	}
   render() {
     const { publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected } = this.props;
 		console.log(this.props)
