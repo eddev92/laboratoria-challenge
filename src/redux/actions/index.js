@@ -84,3 +84,9 @@ export const updatePublication = (publication) => {
     publication
   }
 }
+
+export const resetEditPublication = () => {
+  return {
+    type: RESET_ACTION.RESET_ACTION_RESET_EDIT_PUBLICATION,
+  }
+}

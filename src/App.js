@@ -15,7 +15,8 @@ import {
 	resetValues,
 	resetOptionSelected,
 	updatePublication,
-	resetErrorSavePublication
+	resetErrorSavePublication,
+	resetEditPublication
 } from './redux/actions';
 
 class App extends Component {
@@ -28,15 +29,15 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-		console.log(this.props.errorForSavePublication)
 		if (this.props.errorForSavePublication) {
 			alert('Publicacion ya existe');
 			return this.props.resetErrorSavePublication();
 		}
-		//  if (this.props.publication.message !== this.props.messageForPublicationSelected) {
-		//  	return	this.props.resetOptionSelected();
-		//  }
+		if (this.props.publications && this.props.publications.length === 0) {
+			// return	this.props.resetEditPublication();
+		}
 		if (this.props.publicationSelected && this.props.publications.length === 0) {
+			
 			return	this.props.resetValues();
 		}
   }
@@ -65,21 +66,20 @@ class App extends Component {
 
 	showOptionsPublications = () => this.props.showOptionsPublications();
 	selectOption = (option) => {
-		this.props.selectOption(option);
-		return	this.props.showOptionsPublications();
+		if (option) {
+			this.props.selectOption(option);
+			return	this.props.showOptionsPublications();
+		}
 		 
 	}
 	
 	sharePublication = () => {
-		const { publication, publicationSelected, messageForPublicationSelected, optionSelected, privacityForPublicationSelected, publications } = this.props;
-		const body = {
-			message: messageForPublicationSelected,
-			privacity: optionSelected
-		}
+		const { publication, publicationMessage, optionSelected } = this.props;
 
-		// if (publicationSelected && publications && publications.length && (messageForPublicationSelected !== publication.message || privacityForPublicationSelected !== publication.privacity)) return this.props.updatePublication(body);
-		if (publication) return this.props.addPublication(publication);
-		// return null;
+		if (publicationMessage) {
+			return this.props.addPublication(publication);
+		}
+		return alert('Campo de publicacion es requerido!');
 	}
 
 	deletePublication = (publication) => {
@@ -91,10 +91,17 @@ class App extends Component {
 		return this.props.editPublication(publicationSelected);
 	}
 	updatePublication = () => {
-
+		const { messageForPublicationSelected, optionSelected } = this.props;
+		const body = {
+			message: messageForPublicationSelected,
+			privacity: optionSelected
+		}
+		console.log('editar publicacion}')
+		this.props.updatePublication(body)
+		return this.props.resetEditPublication();
 	}
   render() {
-    const { publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected } = this.props;
+    const { editActive, publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected } = this.props;
 		console.log(this.props)
 
     return (
@@ -117,6 +124,8 @@ class App extends Component {
 					messageForPublicationSelected={messageForPublicationSelected}
 					privacityForPublicationSelected={privacityForPublicationSelected}
 					publicationMessage={publicationMessage}
+					updatePublication={this.updatePublication}
+					editActive={editActive}
 				 />
   		</div>
   );  
@@ -136,7 +145,8 @@ const mapStateToProps = (state) => {
 		publicationMessage: state.auth.publicationMessage,
 		messageForPublicationSelected: state.auth.messageForPublicationSelected,
 		privacityForPublicationSelected: state.auth.privacityForPublicationSelected,
-		errorForSavePublication: state.auth.errorForSavePublication
+		errorForSavePublication: state.auth.errorForSavePublication,
+		editActive: state.auth.editActive
   } 
 }
 
@@ -152,8 +162,9 @@ const mapDispatchToProps = (dispatch) => {
     editPublication: (publication) => { dispatch(editPublication(publication)) },
     resetValues: () => { dispatch(resetValues()) },
     resetOptionSelected: () => { dispatch(resetOptionSelected()) },
-    updatePublication: (newMessage, newPrivacity) => { dispatch(updatePublication(newMessage, newPrivacity)) },
+    updatePublication: (publication) => { dispatch(updatePublication(publication)) },
     resetErrorSavePublication: () => { dispatch(resetErrorSavePublication()) },
+    resetEditPublication: () => { dispatch(resetEditPublication()) },
     }
 }
 

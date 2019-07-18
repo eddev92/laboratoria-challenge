@@ -17,7 +17,8 @@ let defaultState = {
   publicationSelected: false,
   messageForPublicationSelected: '',
   privacityForPublicationSelected: '',
-  errorForSavePublication: false
+  errorForSavePublication: false,
+  editActive: false
 }
 
 const auth = (state = defaultState, action) => {
@@ -48,7 +49,9 @@ const auth = (state = defaultState, action) => {
     case HOME_ACTION.HOME_ACTION_SELECT_OPTION:
       return {
         ...state,
-        optionSelected: action.option
+        optionSelected: action.option,
+        publicationSelected: false
+        // publicationSelected: false
       }
     case HOME_ACTION.HOME_ACTION_HANDLE_PUBLICATION:
       return {
@@ -81,17 +84,16 @@ const auth = (state = defaultState, action) => {
       }
     }
     case HOME_ACTION.HOME_ACTION_DELETE_PUBLICATION: {
-      const auxPublications = [ ...state.publications ];
-
+      const auxPublications = [ ...state.publications ];  
       for (let i = 0; i < auxPublications.length; i++) {
         if ((auxPublications[i].message === action.publication.message) && (action.publication.position === i)) {
           auxPublications.splice(i, 1);
         }
       }
- 
+      
       return {
         ...state,
-        publications: auxPublications
+        publications: auxPublications,
       }
     }
     case HOME_ACTION.HOME_ACTION_EDIT_PUBLICATION: {
@@ -102,6 +104,7 @@ const auth = (state = defaultState, action) => {
       return {
         ...state,
         publicationSelected: true,
+        editActive: true,
         publication: lastPublication,
         // publicationMessage: lastPublication.message,
         messageForPublicationSelected: lastPublication.message,
@@ -109,22 +112,30 @@ const auth = (state = defaultState, action) => {
       }
     }
   case RESET_ACTION.RESET_ACTION_NOW: {
+    const auxMessage = '';
     const lastPublication = { 
       message: '',
       privacity: 1
      };
+     let result = false;
+     if (state.publications.length === 0) {
+       result = true
+     }
     return {
       ...state,
       publicationSelected: false,
       publication: lastPublication,
       optionSelected: 1,
-      publicationMessage: ''
+      publicationMessage: '',
+      messageForPublicationSelected: result ? auxMessage : ''
+
     }
   }
   case RESET_ACTION.RESET_OPTION_SELECTED:
     return {
       ...state,
-      publicationSelected: false
+      publicationSelected: false,
+
     }
   case HOME_ACTION.HOME_ACTION_UPDATE_PUBLICATION: {
     const publicationAux = { ...state.publication };
@@ -132,15 +143,15 @@ const auth = (state = defaultState, action) => {
     publicationAux.message = action.publication.message;
     publicationAux.privacity = action.publication.privacity;
     const publications = state.publications.map(pub => {
-      if (pub.message === publicationAux.message && pub.privacity === publicationAux.privacity) {
-        console.log('publicacion actualizada')
+      if (pub.message === state.publication.message && pub.privacity === state.publication.privacity) {
         pub = publicationAux;
       }
       return pub;
     })
     return {
       ...state,
-      publications
+      publications,
+      publicationSelected: false
       }
   }
   case RESET_ACTION.RESET_ACTION_RESTART_ERROR_SAVE_PUBLICATION:
@@ -148,6 +159,13 @@ const auth = (state = defaultState, action) => {
       ...state,
       errorForSavePublication: false
     }
+  case RESET_ACTION.RESET_ACTION_RESET_EDIT_PUBLICATION:
+  return {
+    ...state,
+    editActive: false,
+    publicationMessage: '',
+    optionSelected: 1,
+  }
     default:
       return state
   }
