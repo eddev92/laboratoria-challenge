@@ -1,4 +1,4 @@
-import { LOGIN_ACTION, HOME_ACTION } from "../../constants/actions";
+import { LOGIN_ACTION, HOME_ACTION, RESET_ACTION } from "../../constants/actions";
 
 let defaultState = {
   user: {
@@ -8,11 +8,15 @@ let defaultState = {
   isValid: false,
   showOptions: false,
   optionSelected: 1,
+  publicationMessage: '',
   publication: {
     message: '',
     privacity: 1
   },
-  publications: []
+  publications: [],
+  publicationSelected: false,
+  newMessageForPublicationSelected: '',
+  newPrivacityForPublicationSelected: ''
 }
 
 const auth = (state = defaultState, action) => {
@@ -45,16 +49,18 @@ const auth = (state = defaultState, action) => {
         ...state,
         optionSelected: action.option
       }
-    case HOME_ACTION.HOME_ACTION_HANDLE_PUBLICATION: 
+    case HOME_ACTION.HOME_ACTION_HANDLE_PUBLICATION:
       return {
         ...state,
-        publication: action.value
-    }
+        publicationMessage: action.value,
+        newMessageForPublicationSelected: action.value,
+        newPrivacityForPublicationSelected: state.optionSelected,
+        // publicationSelected: (action.value === state.publicationMessage)
+      }
     case HOME_ACTION.HOME_ACTION_ADD_PUBLICATION: {
       let auxPublications = [ ...state.publications ];
-      const publication = action.publication;
       const bodyPublication = {
-        message: publication,
+        message: state.publicationMessage,
         privacity: state.optionSelected
       }
       auxPublications.push(bodyPublication);
@@ -65,22 +71,49 @@ const auth = (state = defaultState, action) => {
     }
     case HOME_ACTION.HOME_ACTION_DELETE_PUBLICATION: {
       const auxPublications = [ ...state.publications ];
-      auxPublications.forEach((pub, index) => {
-        console.log(pub)
-        console.log(index)
-        if ((pub.message === action.publication.message) && (action.publication.position === index)) {
 
-          return auxPublications.splice(action.position, 1);
-        } else {
-         return auxPublications;
+      for (let i = 0; i < auxPublications.length; i++) {
+        if ((auxPublications[i].message === action.publication.message) && (action.publication.position === i)) {
+          auxPublications.splice(i, 1);
         }
-      })
+      }
+ 
       return {
         ...state,
         publications: auxPublications
       }
     }
-
+    case HOME_ACTION.HOME_ACTION_EDIT_PUBLICATION: {
+      const lastPublication = { ...state.publication };
+      console.log(lastPublication, 'lastPublication')
+      lastPublication.message = action.publicationSelected.message;
+      lastPublication.privacity = action.publicationSelected.privacity;
+      return {
+        ...state,
+        publicationSelected: true,
+        publication: lastPublication,
+        // publicationMessage: lastPublication.message,
+        newMessageForPublicationSelected: lastPublication.message,
+        optionSelected: lastPublication.privacity,
+      }
+    }
+  case RESET_ACTION.RESET_ACTION_NOW: {
+    const lastPublication = { 
+      message: '',
+      privacity: 1
+     };
+    return {
+      ...state,
+      publicationSelected: false,
+      publication: lastPublication,
+      optionSelected: 1
+    }
+  }
+  case RESET_ACTION.RESET_OPTION_SELECTED:
+    return {
+      ...state,
+      publicationSelected: false
+    }
     default:
       return state
   }

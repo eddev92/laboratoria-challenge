@@ -1,6 +1,7 @@
 import { 
         LOGIN_ACTION,
-        HOME_ACTION
+        HOME_ACTION,
+        RESET_ACTION
 } from "../../constants/actions";
 
 export const login = () => {
@@ -25,7 +26,7 @@ export const showOptions = () => {
 
 export const resetValues = () => {
   return {
-    type: ''
+    type: RESET_ACTION.RESET_ACTION_NOW
   }
 }
 
@@ -43,11 +44,10 @@ export const handlePublication = (value) => {
   }
 }
 
-export const addPublication = (publication, privacity) => {
+export const addPublication = (publication) => {
   return {
     type: HOME_ACTION.HOME_ACTION_ADD_PUBLICATION,
-    publication,
-    privacity
+    publication
   }
 }
 
@@ -56,5 +56,18 @@ export const deletePublication = (publication) => {
   return {
     type: HOME_ACTION.HOME_ACTION_DELETE_PUBLICATION,
     publication
+  }
+}
+
+export const editPublication = (publicationSelected) => {
+  return {
+    type: HOME_ACTION.HOME_ACTION_EDIT_PUBLICATION,
+    publicationSelected
+  }
+}
+
+export const resetOptionSelected = () => {
+  return {
+    type: RESET_ACTION.RESET_OPTION_SELECTED
   }
 }

@@ -3,8 +3,18 @@ import { connect } from 'react-redux'
 import './App.css';
 import LoginComponent from './components/login';
 import HomeComponent from './components/home';
-import { ROUTE_IMG_BACKGROUND } from './constants/constants';
-import { login, handleUserInfo, showOptions, selectOption, handlePublication, addPublication, deletePublication } from './redux/actions';
+import { 
+	login,
+	handleUserInfo,
+	showOptions,
+	selectOption,
+	handlePublication,
+	addPublication,
+	deletePublication,
+	editPublication,
+	resetValues,
+	resetOptionSelected
+} from './redux/actions';
 
 class App extends Component {
   constructor(props) {
@@ -13,7 +23,14 @@ class App extends Component {
 		this.state = {};
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
+		console.log('entro')
+		// if (this.props.publication.message !== this.props.publicationMessage) {
+		// 	return	this.props.resetOptionSelected();
+		// }
+		if (this.props.publicationSelected && this.props.publications.length === 0) {
+			return	this.props.resetValues();
+		}
   }
 
 	loginUser = () => {
@@ -26,7 +43,6 @@ class App extends Component {
 	}
 	handleChange = (e) => {
 		if (e) {
-			console.log(e)
 			const value = e.target.value;
 			const id = e.target.id;
 			return this.props.handleChange(value, id);
@@ -40,7 +56,6 @@ class App extends Component {
 
 	showOptionsPublications = () => this.props.showOptionsPublications();
 	selectOption = (option) => {
-		console.log(option)
 		this.props.selectOption(option);
 		return	this.props.showOptionsPublications();
 		 
@@ -53,17 +68,19 @@ class App extends Component {
 	}
 
 	deletePublication = (publication) => {
-		console.log(publication)
 		return this.props.deletePublication(publication);
 	}
 
+	editPublication = (publicationSelected) => {
+		return this.props.editPublication(publicationSelected);
+	}
+
   render() {
-    const { user, isValid, showOptions, optionSelected, publication, publications } = this.props;
+    const { publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, newMessageForPublicationSelected, newPrivacityForPublicationSelected } = this.props;
 		console.log(this.props)
 
     return (
 			<div className="App" 
-			// style={{backgroundImage: `url(${ROUTE_IMG_BACKGROUND})`}}
 			>
 				<LoginComponent validateUser={this.loginUser} isValid={isValid} user={user} handleChange={this.handleChange} userName={user.userName} password={user.password} />
 				<HomeComponent
@@ -77,6 +94,11 @@ class App extends Component {
 					publication={publication}
 					publications={publications}
 					deletePublication={this.deletePublication}
+					editPublication={this.editPublication}
+					publicationSelected={publicationSelected}
+					newMessageForPublicationSelected={newMessageForPublicationSelected}
+					newPrivacityForPublicationSelected={newPrivacityForPublicationSelected}
+					publicationMessage={publicationMessage}
 				 />
   		</div>
   );  
@@ -91,7 +113,11 @@ const mapStateToProps = (state) => {
 		showOptions: state.auth.showOptions,
 		optionSelected: state.auth.optionSelected,
 		publication: state.auth.publication,
-		publications: state.auth.publications
+		publications: state.auth.publications,
+		publicationSelected: state.auth.publicationSelected,
+		publicationMessage: state.auth.publicationMessage,
+		newMessageForPublicationSelected: state.auth.newMessageForPublicationSelected,
+		newPrivacityForPublicationSelected: state.auth.newPrivacityForPublicationSelected
   } 
 }
 
@@ -102,9 +128,12 @@ const mapDispatchToProps = (dispatch) => {
     showOptionsPublications: () => { dispatch(showOptions()) },
     selectOption: (option) => { dispatch(selectOption(option)) },
     handlePublication: (value) => { dispatch(handlePublication(value)) },
-		addPublication: (publication) => { dispatch(addPublication(publication)) },		
-    deletePublication: (publication) => { dispatch(deletePublication(publication)) }
-  }
+		addPublication: (publication) => { dispatch(addPublication(publication)) },
+    deletePublication: (publication) => { dispatch(deletePublication(publication)) },
+    editPublication: (publication) => { dispatch(editPublication(publication)) },
+    resetValues: () => { dispatch(resetValues()) },
+    resetOptionSelected: () => { dispatch(resetOptionSelected()) }
+    }
 }
 
 export default App = connect(

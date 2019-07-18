@@ -2,6 +2,8 @@
   border: 1px solid black;
   /* height: 570px; */
   max-height: 450px;
+  
+  max-width: 450px;
   min-height: 250px;
   background-color: rgba(255, 255, 255, 0.7);
   margin: auto;
@@ -118,6 +120,7 @@ margin-right: 10px;
 .main-dashboard.input.isLoged {
   max-height: 155px;
   min-height: 155px;
+  max-width: 450px;
   margin-top: 15px;
 }
 .main-home.row {
@@ -153,6 +156,12 @@ margin-right: 10px;
   letter-spacing: normal;
   line-height: 18px;
   border: 1px solid transparent;
+  padding: 0 15px;
+}
+.input-publication input.publicationSelected {
+  border-top: 1px solid red;
+  border-bottom: 1px solid red;
+  font-weight: 600;
 }
 button.shared {
   box-sizing: border-box;
