@@ -3,7 +3,7 @@ import '../../styles/home.css';
 import SelectComponent from '../shared/select';
 import PublicationsComponent from '../publications-content';
 
-const HomeComponent = ({ publicationMessage, isValid, showOptions = false, toggleOptions = () => {}, publications = [], selectOption = () => {}, optionSelected = 0, sharePublication = () => {}, handlePublication = () => {}, publication = '', deletePublication = () => {}, editPublication = () => {}, publicationSelected, newMessageForPublicationSelected, newPrivacityForPublicationSelected }) => {
+const HomeComponent = ({ publicationMessage, isValid, showOptions = false, toggleOptions = () => {}, publications = [], selectOption = () => {}, optionSelected = 0, sharePublication = () => {}, handlePublication = () => {}, publication = '', deletePublication = () => {}, editPublication = () => {}, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected }) => {
   console.log(publications)
   return (
     <div className="row main-home">
@@ -12,10 +12,17 @@ const HomeComponent = ({ publicationMessage, isValid, showOptions = false, toggl
             <div className="title">
               <span>{`${publicationSelected ? 'Editar' : 'Crear'} publicación`}</span>
             </div>
-            <input value={publicationSelected ? newMessageForPublicationSelected : publicationMessage} onChange={handlePublication} className={publicationSelected ? 'publicationSelected' : ''} />
+            <input value={publicationSelected ? messageForPublicationSelected : publicationMessage} onChange={handlePublication} className={publicationSelected ? 'publicationSelected' : ''} />
             <div className="footer row">
               <SelectComponent showOptions={showOptions} toggleOptions={toggleOptions} selectOption={selectOption} optionSelected={optionSelected} />
-              <button className="col-3 shared" onClick={sharePublication}>{publicationSelected ? 'Actualizar' : 'Compartir'}</button>
+              <button 
+                className={
+                  ((messageForPublicationSelected === publication.message && privacityForPublicationSelected === publication.privacity) || 
+                  publicationSelected || !publicationMessage) ? 'col-3 shared disabled' : 'col-3 shared'
+                }
+                  onClick={sharePublication}
+                  disabled={(messageForPublicationSelected === publication.message && privacityForPublicationSelected === publication.privacity) || 
+                    publicationSelected || !publicationMessage}>{publicationSelected ? 'Actualizar' : 'Compartir'}</button>
             </div>
         </div>
       </div>

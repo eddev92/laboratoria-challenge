@@ -71,3 +71,17 @@ export const resetOptionSelected = () => {
     type: RESET_ACTION.RESET_OPTION_SELECTED
   }
 }
+
+export const resetErrorSavePublication = () => {
+  return {
+    type: RESET_ACTION.RESET_ACTION_RESTART_ERROR_SAVE_PUBLICATION
+  }
+}
+
+export const updatePublication = (newMessage, newPrivacity) => {
+  return {
+    type: HOME_ACTION.HOME_ACTION_UPDATE_PUBLICATION,
+    newMessage,
+    newPrivacity
+  }
+}

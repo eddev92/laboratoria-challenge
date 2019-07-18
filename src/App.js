@@ -13,21 +13,29 @@ import {
 	deletePublication,
 	editPublication,
 	resetValues,
-	resetOptionSelected
+	resetOptionSelected,
+	updatePublication,
+	resetErrorSavePublication
 } from './redux/actions';
 
 class App extends Component {
   constructor(props) {
     super(props);
 
-		this.state = {};
+		this.state = {
+			updated: false
+		};
   }
 
   componentDidUpdate() {
-		console.log('entro')
-		// if (this.props.publication.message !== this.props.publicationMessage) {
-		// 	return	this.props.resetOptionSelected();
-		// }
+		console.log(this.props.errorForSavePublication)
+		if (this.props.errorForSavePublication) {
+			alert('Publicacion ya existe');
+			return this.props.resetErrorSavePublication();
+		}
+		 if (this.props.publication.message !== this.props.messageForPublicationSelected) {
+		 	return	this.props.resetOptionSelected();
+		 }
 		if (this.props.publicationSelected && this.props.publications.length === 0) {
 			return	this.props.resetValues();
 		}
@@ -62,13 +70,20 @@ class App extends Component {
 	}
 	
 	sharePublication = () => {
-		const { publication } = this.props;
+		const { publication, publicationSelected, messageForPublicationSelected, optionSelected } = this.props;
+		const body = {
+			message: messageForPublicationSelected,
+			privacity: optionSelected
+		}
+
+		if (publicationSelected) return this.props.updatePublication();
 		if (publication) return this.props.addPublication(publication);
-		return null;
+		// return null;
 	}
 
 	deletePublication = (publication) => {
-		return this.props.deletePublication(publication);
+		this.props.deletePublication(publication);
+		return this.props.resetValues();
 	}
 
 	editPublication = (publicationSelected) => {
@@ -76,7 +91,7 @@ class App extends Component {
 	}
 
   render() {
-    const { publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, newMessageForPublicationSelected, newPrivacityForPublicationSelected } = this.props;
+    const { publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected } = this.props;
 		console.log(this.props)
 
     return (
@@ -96,8 +111,8 @@ class App extends Component {
 					deletePublication={this.deletePublication}
 					editPublication={this.editPublication}
 					publicationSelected={publicationSelected}
-					newMessageForPublicationSelected={newMessageForPublicationSelected}
-					newPrivacityForPublicationSelected={newPrivacityForPublicationSelected}
+					messageForPublicationSelected={messageForPublicationSelected}
+					privacityForPublicationSelected={privacityForPublicationSelected}
 					publicationMessage={publicationMessage}
 				 />
   		</div>
@@ -116,8 +131,9 @@ const mapStateToProps = (state) => {
 		publications: state.auth.publications,
 		publicationSelected: state.auth.publicationSelected,
 		publicationMessage: state.auth.publicationMessage,
-		newMessageForPublicationSelected: state.auth.newMessageForPublicationSelected,
-		newPrivacityForPublicationSelected: state.auth.newPrivacityForPublicationSelected
+		messageForPublicationSelected: state.auth.messageForPublicationSelected,
+		privacityForPublicationSelected: state.auth.privacityForPublicationSelected,
+		errorForSavePublication: state.auth.errorForSavePublication
   } 
 }
 
@@ -132,7 +148,9 @@ const mapDispatchToProps = (dispatch) => {
     deletePublication: (publication) => { dispatch(deletePublication(publication)) },
     editPublication: (publication) => { dispatch(editPublication(publication)) },
     resetValues: () => { dispatch(resetValues()) },
-    resetOptionSelected: () => { dispatch(resetOptionSelected()) }
+    resetOptionSelected: () => { dispatch(resetOptionSelected()) },
+    updatePublication: (newMessage, newPrivacity) => { dispatch(updatePublication(newMessage, newPrivacity)) },
+    resetErrorSavePublication: () => { dispatch(resetErrorSavePublication()) },
     }
 }
 

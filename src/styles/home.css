@@ -191,3 +191,7 @@ button.shared {
   box-shadow: none !important;
   background-color: transparent;
 }
+button.shared.disabled {
+  background: #bbb;
+  color: black;
+}
