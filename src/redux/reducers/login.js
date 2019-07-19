@@ -18,7 +18,8 @@ let defaultState = {
   messageForPublicationSelected: '',
   privacityForPublicationSelected: '',
   errorForSavePublication: false,
-  editActive: false
+  editActive: false,
+  publicationsLoadedState: false
 }
 
 const auth = (state = defaultState, action) => {
@@ -67,7 +68,6 @@ const auth = (state = defaultState, action) => {
         message: state.publicationMessage,
         privacity: state.optionSelected
       }
-// if (auxPublications.length > 0) {
         auxPublications.forEach(pub => {
           if (pub.message === bodyPublication.message && pub.privacity === bodyPublication.privacity) {
             result = true;
@@ -159,12 +159,30 @@ const auth = (state = defaultState, action) => {
       errorForSavePublication: false
     }
   case RESET_ACTION.RESET_ACTION_RESET_EDIT_PUBLICATION:
-  return {
-    ...state,
-    editActive: false,
-    publicationMessage: '',
-    optionSelected: 1,
+    return {
+      ...state,
+      editActive: false,
+      publicationMessage: '',
+      optionSelected: 1,
+    }
+  case HOME_ACTION.HOME_ACTION_GET_PUBLICATIONS: {
+    let aux = [ ...state.publications ];
+    aux = action.publications;
+    return {
+      ...state,
+      publications: aux
+    }
   }
+  case HOME_ACTION.HOME_ACTION_PUBLICATIONS_LOADED:
+    return {
+      ...state,
+      publicationsLoadedState: true
+    }
+  case HOME_ACTION.HOME_ACTION_PUBLICATIONS_LOADED_RESET:
+    return {
+      ...state,
+      publicationsLoadedState: false
+    }
     default:
       return state
   }

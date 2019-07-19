@@ -44,10 +44,9 @@ export const handlePublication = (value) => {
   }
 }
 
-export const addPublication = (publication) => {
+export const addPublication = () => {
   return {
     type: HOME_ACTION.HOME_ACTION_ADD_PUBLICATION,
-    publication
   }
 }
 
@@ -89,3 +88,30 @@ export const resetEditPublication = () => {
     type: RESET_ACTION.RESET_ACTION_RESET_EDIT_PUBLICATION,
   }
 }
+
+export const getPublications = (publicationsAux) => {
+  return {
+    type: RESET_ACTION.RESET_ACTION_RESET_EDIT_PUBLICATION,
+    publicationsAux
+  }
+}
+
+export const updateListPublications = (publications) => {
+  return {
+    type: HOME_ACTION.HOME_ACTION_GET_PUBLICATIONS,
+    publications
+  }
+}
+
+export const publicationsLoaded = () => {
+  return {
+    type: HOME_ACTION.HOME_ACTION_PUBLICATIONS_LOADED
+  }
+}
+
+export const publicationsLoadedReset = () => {
+  return {
+    type: HOME_ACTION.HOME_ACTION_PUBLICATIONS_LOADED_RESET
+  }
+}
+
