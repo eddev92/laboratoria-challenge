@@ -3,7 +3,7 @@ import '../../styles/home.css';
 import SelectComponent from '../shared/select';
 import PublicationsComponent from '../publications-content';
 
-const HomeComponent = ({ editActive = false, isValid, showOptions = false, toggleOptions = () => {}, publications = [], selectOption = () => {}, optionSelected = 0, sharePublication = () => {}, handlePublication = () => {}, publication = '', deletePublication = () => {}, editPublication = () => {}, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected, updatePublication = () => {} }) => {
+const HomeComponent = ({ editActive = false, isValid, showOptions = false, toggleOptions = () => {}, publications = [], selectOption = () => {}, optionSelected = 0, sharePublication = () => {}, handlePublication = () => {}, publication = '', deletePublication = () => {}, editPublication = () => {}, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected, updatePublication = () => {}, cancelUpdatePublication = () => {} }) => {
 
   return (
     <div className="row main-home">
@@ -14,6 +14,7 @@ const HomeComponent = ({ editActive = false, isValid, showOptions = false, toggl
             </div>
             <input value={messageForPublicationSelected} onChange={handlePublication} className={publicationSelected ? 'publicationSelected' : ''} />
             <div className="footer row">
+              {editActive && <a onClick={cancelUpdatePublication}>Cancelar</a>}
               <SelectComponent showOptions={showOptions} toggleOptions={toggleOptions} selectOption={selectOption} optionSelected={optionSelected} />
               <button 
                 className="col-3 shared"

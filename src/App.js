@@ -21,7 +21,8 @@ import {
 	getPublications,
 	updateListPublications,
 	publicationsLoadedReset,
-	publicationsLoaded
+	publicationsLoaded,
+	resetEditActive
 } from './redux/actions';
 import config from './config';
 
@@ -38,11 +39,6 @@ class App extends Component {
 			publications: [],
 			ids: []
 		};
-	}
-	componentWillUpdate(nextProps) {
-		console.log(this.props.publications)
-		console.log(this.state.publications)
-			
 	}
 	componentWillMount() {
 			this.getPublicationFirebase();
@@ -93,11 +89,6 @@ class App extends Component {
 		console.log(publication)
 		publicationsRef.push({publication});
 	}
-	updatePublicationDB = (publication) => {
-		console.log(publication)
-		const publicationsRef = ref.child("publications");
-
-	}
 	loginUser = () => {
 		const { user } = this.props;
 		
@@ -130,10 +121,10 @@ class App extends Component {
 	}
 	
 	sharePublication = () => {
-		const { publication, optionSelected, publications, publicationMessage, errorForSavePublication } = this.props;
+		const { publication, optionSelected, publications, publicationMessage, messageForPublicationSelected } = this.props;
 		let result = false;
 		console.log(publication)
-		if (!publicationMessage) { 
+		if (!publicationMessage || !messageForPublicationSelected) { 
 			return alert('Campo de publicacion es requerido!');
 		} else if (publications.length > 0) {
 			publications.forEach(pub => {
@@ -150,7 +141,6 @@ class App extends Component {
 				privacity: optionSelected
 			}
 
-	 		console.log(body)
 	 		this.savePublication(body)
 			return this.props.addPublication();
 		}
@@ -159,25 +149,42 @@ class App extends Component {
 
 	deletePublication = (publication) => {
 		this.props.deletePublication(publication);
+		console.log(publication)
+		this.deletePublicationDB(publication);
 		return this.props.resetValues();
+	}
+
+	deletePublicationDB = (publication) => {
+		const publicationsRef = ref.child("publications");
+		return publicationsRef.child(publication.id).remove();
 	}
 
 	editPublication = (publicationSelected) => {
 		return this.props.editPublication(publicationSelected);
 	}
 	updatePublication = () => {
-		const { messageForPublicationSelected, optionSelected } = this.props;
+		const { messageForPublicationSelected, optionSelected, publication } = this.props;
 		if (messageForPublicationSelected) {
 			const body = {
 				message: messageForPublicationSelected,
 				privacity: optionSelected
 			}
+			this.updatePublicationDB(publication.id, body)
 			this.props.updatePublication(body)
 			return this.props.resetEditPublication();
 
 		}
 		return alert('Campo comentario es requerido!')
 	}
+
+	updatePublicationDB = (id, newPublication) => {
+		const publicationsRef = ref.child("publications");
+		console.log(newPublication)
+		return publicationsRef.child(id).child('publication').update(newPublication);
+	}
+
+	cancelUpdatePublication = () => this.props.resetEditActive();
+
   render() {
     const { editActive, publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected } = this.props;
 		console.log(this.state.publications)
@@ -204,6 +211,7 @@ class App extends Component {
 					publicationMessage={publicationMessage}
 					updatePublication={this.updatePublication}
 					editActive={editActive}
+					cancelUpdatePublication={this.cancelUpdatePublication}
 				 />
   		</div>
   );  
@@ -247,7 +255,8 @@ const mapDispatchToProps = (dispatch) => {
     getPublications: (publicationsAux) => { dispatch(getPublications(publicationsAux)) },
     updateListPublications: (publications) => { dispatch(updateListPublications(publications)) },
     publicationsLoaded: () => { dispatch(publicationsLoaded()) },
-    publicationsLoadedReset: () => { dispatch(publicationsLoadedReset()) }
+    publicationsLoadedReset: () => { dispatch(publicationsLoadedReset()) },
+    resetEditActive: () => { dispatch(resetEditActive()) }
     }
 }
 

@@ -10,6 +10,7 @@ let defaultState = {
   optionSelected: 1,
   publicationMessage: '',
   publication: {
+    id: '',
     message: '',
     privacity: 1
   },
@@ -54,6 +55,7 @@ const auth = (state = defaultState, action) => {
         // publicationSelected: false
       }
     case HOME_ACTION.HOME_ACTION_HANDLE_PUBLICATION:
+      console.log(action)
       return {
         ...state,
         publicationMessage: action.value,
@@ -97,6 +99,7 @@ const auth = (state = defaultState, action) => {
     }
     case HOME_ACTION.HOME_ACTION_EDIT_PUBLICATION: {
       const lastPublication = { ...state.publication };
+      lastPublication.id = action.publicationSelected.id;
       lastPublication.message = action.publicationSelected.message;
       lastPublication.privacity = action.publicationSelected.privacity;
       
@@ -137,6 +140,7 @@ const auth = (state = defaultState, action) => {
 
     }
   case HOME_ACTION.HOME_ACTION_UPDATE_PUBLICATION: {
+    console.log(action)
     const publicationAux = { ...state.publication };
 
     publicationAux.message = action.publication.message;
@@ -182,6 +186,11 @@ const auth = (state = defaultState, action) => {
     return {
       ...state,
       publicationsLoadedState: false
+    }
+  case RESET_ACTION.RESET_EDIT_ACTIVE:
+    return {
+      ...state,
+      editActive: false
     }
     default:
       return state

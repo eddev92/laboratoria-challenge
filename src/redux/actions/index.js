@@ -115,3 +115,8 @@ export const publicationsLoadedReset = () => {
   }
 }
 
+export const resetEditActive = () => {
+  return {
+    type: RESET_ACTION.RESET_EDIT_ACTIVE
+  }
+}
