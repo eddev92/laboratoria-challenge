@@ -45,7 +45,6 @@ class App extends Component {
 	}
   componentDidUpdate() {
 		if (this.props.publications.length > 0 && this.state.publications.length === 0) {
-			console.log('entro')
 			const publications = [];
 			return this.props.updateListPublications(publications);
 		}	
@@ -54,10 +53,9 @@ class App extends Component {
 			let aux = [];
 			const list = Object.values(this.state.publications[0]);
 				aux = list.map((elm, index) => {
-					 console.log(`${elm}`)
-					return body = { id: this.state.ids[index], message: elm.publication.message, privacity: elm.publication.privacity };
+					body = { id: this.state.ids[index], message: elm.publication.message, privacity: elm.publication.privacity };
+					return body;
 			 	})
-			console.log('ya hay mas de 1 publicacion', aux)
 			this.props.updateListPublications(aux);
 			return this.props.publicationsLoadedReset();
 		}
@@ -86,8 +84,7 @@ class App extends Component {
 	}
 	savePublication = (publication) => {
 		const publicationsRef = ref.child("publications");
-		console.log(publication)
-		publicationsRef.push({publication});
+		return publicationsRef.push({publication});
 	}
 	loginUser = () => {
 		const { user } = this.props;
@@ -121,9 +118,9 @@ class App extends Component {
 	}
 	
 	sharePublication = () => {
-		const { publication, optionSelected, publications, publicationMessage, messageForPublicationSelected } = this.props;
+		const { optionSelected, publications, publicationMessage, messageForPublicationSelected } = this.props;
 		let result = false;
-		console.log(publication)
+	
 		if (!publicationMessage || !messageForPublicationSelected) { 
 			return alert('Campo de publicacion es requerido!');
 		} else if (publications.length > 0) {
@@ -149,7 +146,6 @@ class App extends Component {
 
 	deletePublication = (publication) => {
 		this.props.deletePublication(publication);
-		console.log(publication)
 		this.deletePublicationDB(publication);
 		return this.props.resetValues();
 	}
@@ -182,7 +178,7 @@ class App extends Component {
 
 	updatePublicationDB = (id, newPublication) => {
 		const publicationsRef = ref.child("publications");
-		console.log(newPublication)
+
 		return publicationsRef.child(id).child('publication').update(newPublication);
 	}
 
@@ -190,8 +186,7 @@ class App extends Component {
 
   render() {
     const { editActive, publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected } = this.props;
-		console.log(this.state.publications)
-		console.log(this.props)
+
     return (
 			<div className="App" 
 			>
