@@ -33,3 +33,10 @@
     transform: rotate(360deg);
   }
 }
+@media (max-width: 550px) {
+  .main-login {
+    margin: auto 5% !important;
+    min-width: 370px !important;
+  }
+}
+
