@@ -164,6 +164,9 @@ class App extends Component {
 	}
 	updatePublication = () => {
 		const { messageForPublicationSelected, optionSelected, publication } = this.props;
+		if (messageForPublicationSelected && messageForPublicationSelected === publication.message && optionSelected === publication.privacity) {
+			return alert('Campos identicos')
+		}
 		if (messageForPublicationSelected) {
 			const body = {
 				message: messageForPublicationSelected,
