@@ -10,7 +10,7 @@ const LoginComponent = ({ validateUser = () => {}, isValid, handleChange = () =>
                     <div className="user-inputs">
                         <div className="input-group userName">
                             <div className="input-group-prepend">
-                                <span className="input-group-text" id="basic-addon3">Username</span>
+                                <span className="input-group-text" id="basic-addon3">User</span>
                             </div>
                             <input type="text" value={user.userName} onChange={handleChange} className="form-control" id="userName" aria-describedby="basic-addon3" />
                         </div>

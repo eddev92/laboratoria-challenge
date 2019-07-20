@@ -39,4 +39,9 @@
     min-width: 370px !important;
   }
 }
-
+@media (max-width: 410px) {
+  .main-login {
+    margin: auto 5% !important;
+    min-width: 320px !important;
+  }
+}
