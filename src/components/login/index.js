@@ -5,7 +5,7 @@ import { ROUTE_IMG_BACKGROUND } from '../../constants/constants';
 const LoginComponent = ({ validateUser = () => {}, isValid, handleChange = () => {}, user = { userName: '', password: '' } }) => {
         return (
             <div className={(isValid ) ? 'body-login isValid row' : 'body-login row'}  style={{backgroundImage: `url(${ROUTE_IMG_BACKGROUND})`}}>
-                <div className="main-login col-xs-12 col-sm-7 col-md-6">
+                <div className="main-login col-xs-12 col-sm-7 col-md-4">
                     <img src="images/img_avatar.png" className="img-responsive" />
                     <div className="user-inputs">
                         <div className="input-group userName">
