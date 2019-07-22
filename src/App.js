@@ -189,7 +189,7 @@ class App extends Component {
 
   render() {
     const { editActive, publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected } = this.props;
-		console.log(this.props)
+
     return (
 			<div className="App" 
 			>
