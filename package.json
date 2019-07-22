@@ -15,7 +15,7 @@
     "redux": "^4.0.1"
   },
   "scripts": {
-    "start": "env-cmd .env.development react-scripts start",
+    "start": "react-scripts start",
     "server": "node index.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
