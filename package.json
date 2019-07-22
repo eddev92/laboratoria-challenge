@@ -15,7 +15,7 @@
     "redux": "^4.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "env-cmd .env.development react-scripts start",
     "server": "node index.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -35,5 +35,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "dotenv": "^8.0.0"
   }
 }

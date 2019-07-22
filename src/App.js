@@ -236,7 +236,7 @@ class App extends Component {
 
   render() {
     const { editActive, publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected } = this.props;
-		console.log(this.props)
+
 		return (
 			<div className="App" 
 			>
@@ -277,21 +277,21 @@ class App extends Component {
 }
 const mapStateToProps = (state) => {
   return {
-    user: state.auth.user,
-		isValid: state.auth.isValid,
-		showOptions: state.auth.showOptions,
-		optionSelected: state.auth.optionSelected,
-		publication: state.auth.publication,
-		publications: state.auth.publications,
-		publicationSelected: state.auth.publicationSelected,
-		publicationMessage: state.auth.publicationMessage,
-		messageForPublicationSelected: state.auth.messageForPublicationSelected,
-		privacityForPublicationSelected: state.auth.privacityForPublicationSelected,
-		errorForSavePublication: state.auth.errorForSavePublication,
-		editActive: state.auth.editActive,
-		publicationsLoadedState: state.auth.publicationsLoadedState,
-		invalidPassword: state.auth.invalidPassword,
-		isLoading: state.auth.isLoading
+    user: state.laboratoria.user,
+		isValid: state.laboratoria.isValid,
+		showOptions: state.laboratoria.showOptions,
+		optionSelected: state.laboratoria.optionSelected,
+		publication: state.laboratoria.publication,
+		publications: state.laboratoria.publications,
+		publicationSelected: state.laboratoria.publicationSelected,
+		publicationMessage: state.laboratoria.publicationMessage,
+		messageForPublicationSelected: state.laboratoria.messageForPublicationSelected,
+		privacityForPublicationSelected: state.laboratoria.privacityForPublicationSelected,
+		errorForSavePublication: state.laboratoria.errorForSavePublication,
+		editActive: state.laboratoria.editActive,
+		publicationsLoadedState: state.laboratoria.publicationsLoadedState,
+		invalidPassword: state.laboratoria.invalidPassword,
+		isLoading: state.laboratoria.isLoading
   } 
 }
 

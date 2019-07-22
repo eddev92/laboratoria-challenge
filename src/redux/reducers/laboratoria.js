@@ -1,34 +1,11 @@
 import { LOGIN_ACTION, HOME_ACTION, RESET_ACTION } from "../../constants/actions";
+import { defaultValues } from "../../constants/constants";
 
-let defaultState = {
-  user: {
-    userName: '',
-    password: ''
-  },
-  isValid: false,
-  showOptions: false,
-  optionSelected: 1,
-  publicationMessage: '',
-  publication: {
-    id: '',
-    message: '',
-    privacity: 1
-  },
-  publications: [],
-  publicationSelected: false,
-  messageForPublicationSelected: '',
-  privacityForPublicationSelected: '',
-  errorForSavePublication: false,
-  editActive: false,
-  publicationsLoadedState: false,
-  invalidPassword: true
-}
+let defaultState = defaultValues;
 
-const auth = (state = defaultState, action) => {
+const laboratoria = (state = defaultState, action) => {
   switch (action.type) {
     case LOGIN_ACTION.LOGIN_ACTION_LOGIN_USER: {
-      console.log(action)
-      console.log(state.user)
       return {
         ...state,
         user: state.user,
@@ -241,4 +218,4 @@ case RESET_ACTION.RESET_ACTION_RESET_IS_INVALID:
   }
 }
 
-export default auth
+export default laboratoria;

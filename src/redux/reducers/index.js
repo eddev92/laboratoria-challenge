@@ -1,12 +1,8 @@
 import { combineReducers } from 'redux'
-import auth from './login'
-import reset from './reset'
-import home from './home'
+import laboratoria from './laboratoria'
 
 const laboratoriaApp = combineReducers({
-  auth,
-  reset,
-  home
+  laboratoria,
 })
 
 export default laboratoriaApp
