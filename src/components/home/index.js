@@ -7,7 +7,7 @@ const HomeComponent = ({ logout = () => {}, editActive = false, isValid, showOpt
 
   return (
     <div className="row main-home">
-      <a className="logout" onClick={logout}>Cerrar sesion</a>
+      {isValid && <a className="logout" onClick={logout}>Cerrar sesion</a>}
       <div className={(isValid) ? 'main-dashboard input col-6 isLoged' : 'main-dashboard input col-6'}>        
         <div className="input-publication">
             <div className="title">
