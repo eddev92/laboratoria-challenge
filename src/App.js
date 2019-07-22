@@ -29,6 +29,7 @@ import {
 } from './redux/actions';
 import config from './config';
 import { USER_CREDENTIALS } from './constants/constants';
+import LaboratoriaServices from './services/services';
 
 firebase.initializeApp(config);
 const publicationRef = firebase.database();
@@ -121,10 +122,6 @@ class App extends Component {
 			console.log("ERROR: " + error.code);
 		});
 	}
-	savePublication = (publication) => {
-		const publicationsRef = ref.child("publications");
-		return publicationsRef.push({publication});
-	}
 	loginUser = () => {
 		const { user } = this.props;
 		
@@ -168,6 +165,7 @@ class App extends Component {
 	
 	sharePublication = () => {
 		const { optionSelected, publications, publicationMessage, messageForPublicationSelected } = this.props;
+		const service = new LaboratoriaServices(ref);
 		let result = false;
 
 		if (!publicationMessage || !messageForPublicationSelected) { 
@@ -186,20 +184,16 @@ class App extends Component {
 				privacity: optionSelected
 			}
 
-	 		this.savePublication(body)
+			service.savePublication(body)
 			 return this.props.addPublication();
 		}
 		return alert('Publicacion ya existe!')
 	}
 
 	deletePublication = (publication) => {
+		const service = new LaboratoriaServices(ref);
 		this.props.deletePublication(publication);
-		return	this.deletePublicationDB(publication);
-	}
-
-	deletePublicationDB = (publication) => {
-		const publicationsRef = ref.child("publications");
-		return publicationsRef.child(publication.id).remove();
+		return	service.deletePublicationDB(publication);
 	}
 
 	editPublication = (publicationSelected) => {
@@ -211,22 +205,17 @@ class App extends Component {
 			return alert('Campos identicos')
 		}
 		if (messageForPublicationSelected) {
+			const service = new LaboratoriaServices(ref);
 			const body = {
 				message: messageForPublicationSelected,
 				privacity: optionSelected
 			}
-			this.updatePublicationDB(publication.id, body)
+			service.updatePublicationDB(publication.id, body)
 			this.props.updatePublication(body)
 			return this.props.resetEditPublication();
 
 		}
 		return alert('Campo comentario es requerido!')
-	}
-
-	updatePublicationDB = (id, newPublication) => {
-		const publicationsRef = ref.child("publications");
-
-		return publicationsRef.child(id).child('publication').update(newPublication);
 	}
 
 	cancelUpdatePublication = () => {
