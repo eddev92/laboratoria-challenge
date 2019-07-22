@@ -23,26 +23,32 @@ import {
 	publicationsLoadedReset,
 	publicationsLoaded,
 	resetEditActive,
-	resetInputValues
+	resetInputValues,
+	resetIsValid
 } from './redux/actions';
 import config from './config';
 
 firebase.initializeApp(config);
 const publicationRef = firebase.database();
 const ref =	publicationRef.ref('/');
+const storage = window.localStorage;
 
 class App extends Component {
   constructor(props) {
     super(props);
 
 		this.state = {
-			updated: false,
 			publications: [],
-			ids: []
+			ids: [],
+			userNameStoraged: '',
+			passwordStoraged: ''
 		};
 	}
+	componentDidMount() {
+		this.validateLogin();
+	}
 	componentWillMount() {
-			this.getPublicationFirebase();
+		this.getPublicationFirebase();
 	}
   componentDidUpdate() {
 		if (this.props.publications.length > 0 && this.state.publications.length === 0) {
@@ -70,7 +76,21 @@ class App extends Component {
 		if (this.props.publicationSelected && this.props.publications.length === 0) {			
 			return	this.props.resetValues();
 		}
-  }
+	}
+	validateLogin = () => {
+		const userNameStoraged = storage.getItem('username');
+		const passwordStoraged = storage.getItem('password');
+		
+		this.setState({ userNameStoraged, passwordStoraged }, () => {
+			return this.validateNow(userNameStoraged, passwordStoraged);
+		});
+	}
+	validateNow = (userNameStoraged, passwordStoraged) => {
+		if (userNameStoraged && passwordStoraged) {
+			return this.props.loginUser();
+		}
+		return this.props.resetIsValid();
+	}
 	getPublicationFirebase = () => {
 		ref.on("value", (snapshot) => {
 			if (snapshot.val() !== null) {
@@ -91,9 +111,16 @@ class App extends Component {
 		const { user } = this.props;
 		
 		if (user && user.userName && user.password) {
+			storage.setItem('username', user.userName.toString())
+			storage.setItem('password', user.password)
 			return this.props.loginUser();
 		}
 		return alert('Ambos campos son requeridos!');
+	}
+	logout = () => {
+		storage.clear();
+		this.setState({ userNameStoraged: '', passwordStoraged: '' });
+		return this.props.resetIsValid();
 	}
 	handleChange = (e) => {
 		if (e) {
@@ -189,10 +216,17 @@ class App extends Component {
   render() {
     const { editActive, publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected } = this.props;
 
-    return (
+		return (
 			<div className="App" 
 			>
-				<LoginComponent validateUser={this.loginUser} isValid={isValid} user={user} handleChange={this.handleChange} userName={user.userName} password={user.password} />
+				<LoginComponent
+				validateUser={this.loginUser}
+				isValid={isValid}
+				user={user}
+				handleChange={this.handleChange}
+				userName={user.userName}
+				password={user.password}
+				/>
 				<HomeComponent
 					isValid={isValid}
 					showOptions={showOptions}
@@ -212,6 +246,7 @@ class App extends Component {
 					updatePublication={this.updatePublication}
 					editActive={editActive}
 					cancelUpdatePublication={this.cancelUpdatePublication}
+					logout={this.logout}
 				 />
   		</div>
   );  
@@ -257,7 +292,8 @@ const mapDispatchToProps = (dispatch) => {
     publicationsLoaded: () => { dispatch(publicationsLoaded()) },
     publicationsLoadedReset: () => { dispatch(publicationsLoadedReset()) },
     resetEditActive: () => { dispatch(resetEditActive()) },
-    resetInputValues: () => { dispatch(resetInputValues()) }
+    resetInputValues: () => { dispatch(resetInputValues()) },
+    resetIsValid: () => { dispatch(resetIsValid()) }
     }
 }
 

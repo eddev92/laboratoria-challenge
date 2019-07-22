@@ -3,10 +3,11 @@ import '../../styles/home.css';
 import SelectComponent from '../shared/select';
 import PublicationsComponent from '../publications-content';
 
-const HomeComponent = ({ editActive = false, isValid, showOptions = false, toggleOptions = () => {}, publications = [], selectOption = () => {}, optionSelected = 0, sharePublication = () => {}, handlePublication = () => {}, publication = '', deletePublication = () => {}, editPublication = () => {}, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected, updatePublication = () => {}, cancelUpdatePublication = () => {} }) => {
+const HomeComponent = ({ logout = () => {}, editActive = false, isValid, showOptions = false, toggleOptions = () => {}, publications = [], selectOption = () => {}, optionSelected = 0, sharePublication = () => {}, handlePublication = () => {}, publication = '', deletePublication = () => {}, editPublication = () => {}, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected, updatePublication = () => {}, cancelUpdatePublication = () => {} }) => {
 
   return (
     <div className="row main-home">
+      <a className="logout" onClick={logout}>Cerrar sesion</a>
       <div className={(isValid) ? 'main-dashboard input col-6 isLoged' : 'main-dashboard input col-6'}>        
         <div className="input-publication">
             <div className="title">

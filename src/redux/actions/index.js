@@ -126,3 +126,9 @@ export const resetInputValues = () => {
     type: RESET_ACTION.INPUT_VALUES
   }
 }
+
+export const resetIsValid = () => {
+  return {
+    type: RESET_ACTION.RESET_ACTION_RESET_LOGIN_VALIDATION
+  }
+}

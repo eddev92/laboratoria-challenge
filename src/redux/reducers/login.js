@@ -210,6 +210,11 @@ const auth = (state = defaultState, action) => {
     messageForPublicationSelected: '',
     optionSelected: 1
   }
+case RESET_ACTION.RESET_ACTION_RESET_LOGIN_VALIDATION:
+  return {
+    ...state,
+    isValid: false
+  }
     default:
       return state
   }

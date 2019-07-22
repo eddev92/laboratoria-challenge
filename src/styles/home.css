@@ -197,3 +197,8 @@ button.shared.disabled {
 .footer.row a {
   cursor: pointer;
 }
+.logout {
+  width: 150px;
+  margin: auto;
+  cursor: pointer;
+}

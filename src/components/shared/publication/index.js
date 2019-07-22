@@ -16,7 +16,7 @@ const PublicationComponent = ({ publication, editPublication = () => {}, deleteP
 
   publicationAux.position = position;
     return (
-      <div className="publication-content">
+      <div className="publication-content" key={position}>
         <span>{privacity}</span>
         <p>
           {publication.message}
