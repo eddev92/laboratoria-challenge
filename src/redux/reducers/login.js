@@ -20,17 +20,24 @@ let defaultState = {
   privacityForPublicationSelected: '',
   errorForSavePublication: false,
   editActive: false,
-  publicationsLoadedState: false
+  publicationsLoadedState: false,
+  invalidPassword: true
 }
 
 const auth = (state = defaultState, action) => {
   switch (action.type) {
-    case LOGIN_ACTION.LOGIN_ACTION_LOGIN_USER:
+    case LOGIN_ACTION.LOGIN_ACTION_LOGIN_USER: {
+      console.log(action)
+      console.log(state.user)
       return {
         ...state,
         user: state.user,
-        isValid: true
+        isLoading: true,
+        invalidPassword: (state.user.userName !== 'laboratoria' && state.user.password !== 'laboratoria123') ? true : false,
+        isValid: ((action.user === 'laboratoria' && action.password === 'laboratoria123') ||
+         (state.user.userName === 'laboratoria' && state.user.password === 'laboratoria123')) ? true : false
       }
+    }
     case LOGIN_ACTION.LOGIN_ACTION_HANDLE_USER_INFO: {
 			const value = action.value;
       const id = action.id;
@@ -210,10 +217,24 @@ const auth = (state = defaultState, action) => {
     messageForPublicationSelected: '',
     optionSelected: 1
   }
-case RESET_ACTION.RESET_ACTION_RESET_LOGIN_VALIDATION:
+case RESET_ACTION.RESET_ACTION_RESET_LOGIN_VALIDATION: {
+  const userReset = {
+    userName: '',
+    password: ''
+  }
   return {
     ...state,
-    isValid: false
+    isValid: false,
+    user: userReset,
+    isLoading: false,
+    publications: []
+  }
+}
+case RESET_ACTION.RESET_ACTION_RESET_IS_INVALID:
+  return {
+    ...state,
+    invalidPassword: true,
+    isLoading: false
   }
     default:
       return state

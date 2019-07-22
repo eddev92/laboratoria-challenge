@@ -24,9 +24,11 @@ import {
 	publicationsLoaded,
 	resetEditActive,
 	resetInputValues,
-	resetIsValid
+	resetIsValid,
+	resetIsInvalid
 } from './redux/actions';
 import config from './config';
+import { USER_CREDENTIALS } from './constants/constants';
 
 firebase.initializeApp(config);
 const publicationRef = firebase.database();
@@ -45,12 +47,22 @@ class App extends Component {
 		};
 	}
 	componentDidMount() {
-		this.validateLogin();
+			this.validateLogin();
 	}
 	componentWillMount() {
-		this.getPublicationFirebase();
+		const userNameStoraged = storage.getItem('username');
+		const passwordStoraged = storage.getItem('password');
+
+		if (!userNameStoraged && !passwordStoraged) {
+			return storage.clear();
+		}
 	}
   componentDidUpdate() {
+		if (this.props.isValid && !this.props.invalidPassword) {
+			this.getPublicationFirebase();
+			return this.props.resetIsInvalid();
+		}
+
 		if (this.props.publications.length > 0 && this.state.publications.length === 0) {
 			const publications = [];
 			return this.props.updateListPublications(publications);
@@ -80,16 +92,22 @@ class App extends Component {
 	validateLogin = () => {
 		const userNameStoraged = storage.getItem('username');
 		const passwordStoraged = storage.getItem('password');
-		
-		this.setState({ userNameStoraged, passwordStoraged }, () => {
-			return this.validateNow(userNameStoraged, passwordStoraged);
-		});
+
+		if (userNameStoraged && passwordStoraged) {
+			this.setState({ userNameStoraged, passwordStoraged }, () => {
+				return this.validateNow(userNameStoraged, passwordStoraged);
+			});
+		}
+		return null;
 	}
 	validateNow = (userNameStoraged, passwordStoraged) => {
-		if (userNameStoraged && passwordStoraged) {
-			return this.props.loginUser();
-		}
-		return this.props.resetIsValid();
+			if (userNameStoraged === USER_CREDENTIALS.userName && passwordStoraged === USER_CREDENTIALS.password) {			
+				this.props.loginUser(userNameStoraged, passwordStoraged);
+				this.getPublicationFirebase();
+				return this.props.resetIsInvalid();
+			}
+			this.props.resetIsValid();
+			return alert('Usuario y contraseña no coinciden');
 	}
 	getPublicationFirebase = () => {
 		ref.on("value", (snapshot) => {
@@ -111,9 +129,12 @@ class App extends Component {
 		const { user } = this.props;
 		
 		if (user && user.userName && user.password) {
-			storage.setItem('username', user.userName.toString())
-			storage.setItem('password', user.password)
-			return this.props.loginUser();
+			if (user.userName === USER_CREDENTIALS.userName && user.password === USER_CREDENTIALS.password) {
+				storage.setItem('username', user.userName.toString())
+				storage.setItem('password', user.password)
+				return this.props.loginUser();
+			}
+			return alert('Usuario y contraseña no coinciden')
 		}
 		return alert('Ambos campos son requeridos!');
 	}
@@ -215,7 +236,7 @@ class App extends Component {
 
   render() {
     const { editActive, publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected } = this.props;
-
+		console.log(this.props)
 		return (
 			<div className="App" 
 			>
@@ -268,13 +289,15 @@ const mapStateToProps = (state) => {
 		privacityForPublicationSelected: state.auth.privacityForPublicationSelected,
 		errorForSavePublication: state.auth.errorForSavePublication,
 		editActive: state.auth.editActive,
-		publicationsLoadedState: state.auth.publicationsLoadedState
+		publicationsLoadedState: state.auth.publicationsLoadedState,
+		invalidPassword: state.auth.invalidPassword,
+		isLoading: state.auth.isLoading
   } 
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-  	loginUser: () => { dispatch(login()) },
+  	loginUser: (user, password) => { dispatch(login(user, password)) },
     handleChange: (value, id) => { dispatch(handleUserInfo(value, id)) },
     showOptionsPublications: () => { dispatch(showOptions()) },
     selectOption: (option) => { dispatch(selectOption(option)) },
@@ -293,7 +316,8 @@ const mapDispatchToProps = (dispatch) => {
     publicationsLoadedReset: () => { dispatch(publicationsLoadedReset()) },
     resetEditActive: () => { dispatch(resetEditActive()) },
     resetInputValues: () => { dispatch(resetInputValues()) },
-    resetIsValid: () => { dispatch(resetIsValid()) }
+		resetIsValid: () => { dispatch(resetIsValid()) },
+		resetIsInvalid: () => { dispatch(resetIsInvalid()) },
     }
 }
 

@@ -4,9 +4,11 @@ import {
         RESET_ACTION
 } from "../../constants/actions";
 
-export const login = () => {
+export const login = (user, password) => {
   return {
     type: LOGIN_ACTION.LOGIN_ACTION_LOGIN_USER,
+    user,
+    password
   }
 }
 
@@ -130,5 +132,11 @@ export const resetInputValues = () => {
 export const resetIsValid = () => {
   return {
     type: RESET_ACTION.RESET_ACTION_RESET_LOGIN_VALIDATION
+  }
+}
+
+export const resetIsInvalid = () => {
+  return {
+    type: RESET_ACTION.RESET_ACTION_RESET_IS_INVALID
   }
 }
