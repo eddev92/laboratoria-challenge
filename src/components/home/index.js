@@ -12,7 +12,7 @@ const HomeComponent = ({ editActive = false, isValid, showOptions = false, toggl
             <div className="title">
               <span>{`${editActive ? 'Editar' : 'Crear'} publicación`}</span>
             </div>
-            <input value={messageForPublicationSelected} onChange={handlePublication} className={publicationSelected ? 'publicationSelected' : ''} />
+            <input value={messageForPublicationSelected} onChange={handlePublication} className={publicationSelected && editActive ? 'publicationSelected' : 'publicationDiselected'} />
             <div className="footer row">
               {editActive && <a onClick={cancelUpdatePublication}>Cancelar</a>}
               <SelectComponent showOptions={showOptions} toggleOptions={toggleOptions} selectOption={selectOption} optionSelected={optionSelected} />

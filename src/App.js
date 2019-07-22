@@ -22,7 +22,8 @@ import {
 	updateListPublications,
 	publicationsLoadedReset,
 	publicationsLoaded,
-	resetEditActive
+	resetEditActive,
+	resetInputValues
 } from './redux/actions';
 import config from './config';
 
@@ -120,15 +121,14 @@ class App extends Component {
 	sharePublication = () => {
 		const { optionSelected, publications, publicationMessage, messageForPublicationSelected } = this.props;
 		let result = false;
-	
+
 		if (!publicationMessage || !messageForPublicationSelected) { 
 			return alert('Campo de publicacion es requerido!');
 		} else if (publications.length > 0) {
 			publications.forEach(pub => {
 				if (pub.message === publicationMessage && pub.privacity === optionSelected) {
 					result = true;
-			} else {          
-				result = false;
+					return result;
 				}
 			})
 		}
@@ -139,15 +139,15 @@ class App extends Component {
 			}
 
 	 		this.savePublication(body)
-			return this.props.addPublication();
+			 return this.props.addPublication();
 		}
 		return alert('Publicacion ya existe!')
 	}
 
 	deletePublication = (publication) => {
 		this.props.deletePublication(publication);
-		this.deletePublicationDB(publication);
-		return this.props.resetValues();
+		return	this.deletePublicationDB(publication);
+		 this.props.resetInputValues();
 	}
 
 	deletePublicationDB = (publication) => {
@@ -182,11 +182,14 @@ class App extends Component {
 		return publicationsRef.child(id).child('publication').update(newPublication);
 	}
 
-	cancelUpdatePublication = () => this.props.resetEditActive();
+	cancelUpdatePublication = () => {
+		this.props.resetEditActive();
+		this.props.resetEditPublication();
+	}
 
   render() {
     const { editActive, publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected } = this.props;
-
+		console.log(this.props)
     return (
 			<div className="App" 
 			>
@@ -254,7 +257,8 @@ const mapDispatchToProps = (dispatch) => {
     updateListPublications: (publications) => { dispatch(updateListPublications(publications)) },
     publicationsLoaded: () => { dispatch(publicationsLoaded()) },
     publicationsLoadedReset: () => { dispatch(publicationsLoadedReset()) },
-    resetEditActive: () => { dispatch(resetEditActive()) }
+    resetEditActive: () => { dispatch(resetEditActive()) },
+    resetInputValues: () => { dispatch(resetInputValues()) }
     }
 }
 

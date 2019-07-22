@@ -80,10 +80,13 @@ const auth = (state = defaultState, action) => {
           }
         })
       if (!result) auxPublications.push(bodyPublication);
+
       return {
         ...state,
         publications: auxPublications.reverse(),
-        errorForSavePublication: result
+        errorForSavePublication: result,
+        messageForPublicationSelected: '',
+        publicationMessage: '',
       }
     }
     case HOME_ACTION.HOME_ACTION_DELETE_PUBLICATION: {
@@ -97,6 +100,8 @@ const auth = (state = defaultState, action) => {
       return {
         ...state,
         publications: auxPublications,
+        publicationSelected: !(state.publicationSelected && state.editActive) ? false : true,
+        editActive: !(state.publicationSelected && state.editActive) ? false : true
       }
     }
     case HOME_ACTION.HOME_ACTION_EDIT_PUBLICATION: {
@@ -170,7 +175,9 @@ const auth = (state = defaultState, action) => {
       ...state,
       editActive: false,
       publicationMessage: '',
+      messageForPublicationSelected: '',
       optionSelected: 1,
+      publication: {id: '', message: '', privacity: 1}
     }
   case HOME_ACTION.HOME_ACTION_GET_PUBLICATIONS: {
     let aux = [ ...state.publications ];
@@ -195,6 +202,14 @@ const auth = (state = defaultState, action) => {
       ...state,
       editActive: false
     }
+  case RESET_ACTION.INPUT_VALUES:
+  return {
+    ...state,
+    editActive: false,
+    publicationMessage: '',
+    messageForPublicationSelected: '',
+    optionSelected: 1
+  }
     default:
       return state
   }

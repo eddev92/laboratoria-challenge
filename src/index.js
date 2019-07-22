@@ -5,9 +5,9 @@ import { createStore } from 'redux'
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import riqraApp from './redux/reducers';
+import laboratoriaApp from './redux/reducers';
 
-let store = createStore(riqraApp)
+let store = createStore(laboratoriaApp)
 
 ReactDOM.render(
     <Provider store={store}>

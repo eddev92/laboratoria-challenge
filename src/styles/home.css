@@ -120,7 +120,7 @@ margin-right: 10px;
 .main-dashboard.input.isLoged {
   max-height: 155px;
   min-height: 155px;
-  max-width: 390px;
+  width: 90%;
   margin-top: 15px;
 }
 .main-home.row {
@@ -157,6 +157,7 @@ margin-right: 10px;
   line-height: 18px;
   border: 1px solid transparent;
   padding: 0 15px;
+  outline: none;
 }
 .input-publication input.publicationSelected {
   border-top: 1px solid red;
@@ -194,4 +195,7 @@ button.shared {
 button.shared.disabled {
   background: #bbb;
   color: black;
+}
+.footer.row a {
+  cursor: pointer;
 }

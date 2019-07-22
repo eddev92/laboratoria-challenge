@@ -120,3 +120,9 @@ export const resetEditActive = () => {
     type: RESET_ACTION.RESET_EDIT_ACTIVE
   }
 }
+
+export const resetInputValues = () => {
+  return {
+    type: RESET_ACTION.INPUT_VALUES
+  }
+}

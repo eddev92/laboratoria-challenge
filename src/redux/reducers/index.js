@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
 import auth from './login'
 
-const riqraApp = combineReducers({
+const laboratoriaApp = combineReducers({
   auth,
 })
 
-export default riqraApp
+export default laboratoriaApp
