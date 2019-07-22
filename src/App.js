@@ -147,7 +147,6 @@ class App extends Component {
 	deletePublication = (publication) => {
 		this.props.deletePublication(publication);
 		return	this.deletePublicationDB(publication);
-		 this.props.resetInputValues();
 	}
 
 	deletePublicationDB = (publication) => {
@@ -184,7 +183,7 @@ class App extends Component {
 
 	cancelUpdatePublication = () => {
 		this.props.resetEditActive();
-		this.props.resetEditPublication();
+		return this.props.resetEditPublication();
 	}
 
   render() {

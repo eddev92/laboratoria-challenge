@@ -5,9 +5,12 @@ const SelectComponent = ({ showOptions = false, toggleOptions = () => {}, select
     return (
         <div className="main-select">
           <a role="button" className={showOptions ? 'col-3 private active' : 'col-3 private'} onClick={toggleOptions}>
-            {optionSelected === 1 && 'Público'}
-            {optionSelected === 2 && 'Amigos'}
-            {optionSelected === 3 && 'Sólo yo'}
+            {`${optionSelected === 1 ? 'Público': '' } 
+               ${optionSelected === 2 ? 'Amigos': '' } 
+               ${optionSelected === 3 ? 'Sólo yo': '' }
+               ▼
+            `}
+           
           </a>
           <div className={showOptions ? 'private-list-options active' : 'private-list-options'}>
             <ul>
