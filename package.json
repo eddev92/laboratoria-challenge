@@ -8,7 +8,6 @@
     "firebase": "^6.3.0",
     "material-design-icons": "^3.0.1",
     "react": "^16.8.6",
-    "react-apollo": "^2.5.8",
     "react-dom": "^16.8.6",
     "react-redux": "^7.1.0",
     "react-scripts": "3.0.1",
@@ -35,8 +34,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "dotenv": "^8.0.0"
   }
 }
