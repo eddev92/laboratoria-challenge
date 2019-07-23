@@ -8,7 +8,7 @@
   transition: all 0.9s ease-in-out;
 }
 .publication-content p {
-  border-bottom: 1px solid #e5e5;
+  border-bottom: 1px solid #bbb;
   padding-bottom: 10px;
   padding-right: 20%;
 }

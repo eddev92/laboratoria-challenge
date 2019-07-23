@@ -3,7 +3,7 @@ import '../../styles/home.css';
 import SelectComponent from '../shared/select';
 import PublicationsComponent from '../publications-content';
 
-const HomeComponent = ({ logout = () => {}, editActive = false, isValid, showOptions = false, toggleOptions = () => {}, publications = [], selectOption = () => {}, optionSelected = 0, sharePublication = () => {}, handlePublication = () => {}, publication = '', deletePublication = () => {}, editPublication = () => {}, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected, updatePublication = () => {}, cancelUpdatePublication = () => {} }) => {
+const HomeComponent = ({ filterPublications = () => {}, logout = () => {}, editActive = false, isValid, showOptions = false, toggleOptions = () => {}, publications = [], selectOption = () => {}, optionSelected = 0, sharePublication = () => {}, handlePublication = () => {}, publication = '', deletePublication = () => {}, editPublication = () => {}, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected, updatePublication = () => {}, cancelUpdatePublication = () => {} }) => {
 
   return (
     <div className="row main-home">
@@ -27,7 +27,15 @@ const HomeComponent = ({ logout = () => {}, editActive = false, isValid, showOpt
         <div className={(isValid) ? 'main-dashboard col-6 isLoged all-publications' : 'main-dashboard all-publications col-6'}> 
             {(isValid && publications && publications.length > 0) 
               ?
-              <PublicationsComponent publications={publications} deletePublication={deletePublication} editPublication={editPublication} />
+              <div>
+                <div className="row">
+                  <div className="col-3 filterButton" onClick={filterPublications.bind(this, 1)}>Público</div>
+                  <div className="col-3 filterButton" onClick={filterPublications.bind(this, 2)}>Amigos</div>
+                  <div className="col-3 filterButton" onClick={filterPublications.bind(this, 3)}>Sólo yo</div>
+                  <div className="col-3 filterButton" onClick={filterPublications.bind(this, 4)}>Todos</div>
+                </div>
+                <PublicationsComponent publications={publications} deletePublication={deletePublication} editPublication={editPublication} />
+              </div>
               :
               <div className='main-content'>
                 <div className="empty-comments">

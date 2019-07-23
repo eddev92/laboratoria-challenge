@@ -140,3 +140,18 @@ export const resetIsInvalid = () => {
     type: RESET_ACTION.RESET_ACTION_RESET_IS_INVALID
   }
 }
+
+export const getPublicationsFiltered = (publications) => {
+  return {
+    type: HOME_ACTION.HOME_ACTION_GET_PUBLICATIONS_FILTERED,
+    publications
+  }
+}
+
+export const savePublicationsDB = (publications) => {
+  return {
+    type: HOME_ACTION.HOME_ACTION_SAVE_PUBLICATIONS_DB,
+    publications
+  }
+}
+

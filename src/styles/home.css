@@ -202,3 +202,7 @@ button.shared.disabled {
   margin: auto;
   cursor: pointer;
 }
+.filterButton {
+  cursor: pointer;
+  text-decoration: underline;
+}

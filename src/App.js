@@ -25,7 +25,9 @@ import {
 	resetEditActive,
 	resetInputValues,
 	resetIsValid,
-	resetIsInvalid
+	resetIsInvalid,
+	getPublicationsFiltered,
+	savePublicationsDB
 } from './redux/actions';
 import config from './config';
 import { USER_CREDENTIALS } from './constants/constants';
@@ -70,13 +72,16 @@ class App extends Component {
 		}	
 		if (this.props.publicationsLoadedState && this.state.publications.length > 0) {
 			let body = {id: '', message: '', privacity: ''};
-			let aux = [];
-			const list = Object.values(this.state.publications[0]);
-				aux = list.map((elm, index) => {
-					body = { id: this.state.ids[index], message: elm.publication.message, privacity: elm.publication.privacity };
+			let aux = [ ...this.state.publications ];
+			let modifyAux = [];
+			const transform = Object.values(aux[0]).map(val => val.publication)
+
+				modifyAux = transform.map((elm, index) => {
+					body = { id: this.state.ids[index], message: elm.message, privacity: elm.privacity };
 					return body;
-			 	})
-			this.props.updateListPublications(aux);
+				 })
+			this.props.savePublicationsDB(modifyAux)
+			this.props.updateListPublications(modifyAux);
 			return this.props.publicationsLoadedReset();
 		}
 		if (this.props.errorForSavePublication) {
@@ -102,10 +107,10 @@ class App extends Component {
 		return null;
 	}
 	validateNow = (userNameStoraged, passwordStoraged) => {
-			if (userNameStoraged === USER_CREDENTIALS.userName && passwordStoraged === USER_CREDENTIALS.password) {			
-				this.props.loginUser(userNameStoraged, passwordStoraged);
+			if (userNameStoraged === USER_CREDENTIALS.userName && passwordStoraged === USER_CREDENTIALS.password) {
 				this.getPublicationFirebase();
-				return this.props.resetIsInvalid();
+				this.props.resetIsInvalid();
+				return this.props.loginUser(userNameStoraged, passwordStoraged);
 			}
 			this.props.resetIsValid();
 			return alert('Usuario y contraseña no coinciden');
@@ -192,6 +197,7 @@ class App extends Component {
 
 	deletePublication = (publication) => {
 		const service = new LaboratoriaServices(ref);
+
 		this.props.deletePublication(publication);
 		return	service.deletePublicationDB(publication);
 	}
@@ -202,7 +208,7 @@ class App extends Component {
 	updatePublication = () => {
 		const { messageForPublicationSelected, optionSelected, publication } = this.props;
 		if (messageForPublicationSelected && messageForPublicationSelected === publication.message && optionSelected === publication.privacity) {
-			return alert('Campos identicos')
+			return alert('Campos idénticos')
 		}
 		if (messageForPublicationSelected) {
 			const service = new LaboratoriaServices(ref);
@@ -210,19 +216,47 @@ class App extends Component {
 				message: messageForPublicationSelected,
 				privacity: optionSelected
 			}
-			service.updatePublicationDB(publication.id, body)
+
+			this.getPublicationFirebase();
+			service.updatePublicationDB(publication.id, body);
 			this.props.updatePublication(body)
 			return this.props.resetEditPublication();
 
 		}
-		return alert('Campo comentario es requerido!')
+		return alert('Campo comentario es requerido')
 	}
 
 	cancelUpdatePublication = () => {
 		this.props.resetEditActive();
 		return this.props.resetEditPublication();
 	}
+	filterPublications = (type) => {
+		let publicationsFiltered = [];
+		const { publications } = this.state;
+		let aux = Object.values(publications[0]);
+		let publicationsAux = aux.map(pub => pub.publication)
 
+		publicationsAux = publicationsAux.map((pub, index) => {
+			return {id: this.state.ids[index] ,message: pub.message, privacity: pub.privacity }
+		})
+
+		if (type === 4) {
+			this.getPublicationFirebase()
+			return this.props.getPublicationsFiltered(publicationsAux);
+		} else {
+			publicationsAux.forEach(pub => {
+				if (pub && pub.privacity === type) {
+					return publicationsFiltered.push(pub);
+				}
+			})
+			if (publicationsFiltered.length > 0) {
+				return this.props.getPublicationsFiltered(publicationsFiltered);
+			} else {
+				alert('No existen publicaciones con este tipo de privacidad')
+				return this.props.getPublicationsFiltered(publicationsAux);
+			}
+		}		
+	}
   render() {
     const { editActive, publicationMessage, user, isValid, showOptions, optionSelected, publication, publications, publicationSelected, messageForPublicationSelected, privacityForPublicationSelected } = this.props;
 
@@ -257,6 +291,7 @@ class App extends Component {
 					editActive={editActive}
 					cancelUpdatePublication={this.cancelUpdatePublication}
 					logout={this.logout}
+					filterPublications={this.filterPublications}
 				 />
   		</div>
   );  
@@ -280,7 +315,8 @@ const mapStateToProps = (state) => {
 		editActive: state.laboratoria.editActive,
 		publicationsLoadedState: state.laboratoria.publicationsLoadedState,
 		invalidPassword: state.laboratoria.invalidPassword,
-		isLoading: state.laboratoria.isLoading
+		isLoading: state.laboratoria.isLoading,
+		publicationsDB: state.laboratoria.publicationsDB
   } 
 }
 
@@ -307,6 +343,8 @@ const mapDispatchToProps = (dispatch) => {
     resetInputValues: () => { dispatch(resetInputValues()) },
 		resetIsValid: () => { dispatch(resetIsValid()) },
 		resetIsInvalid: () => { dispatch(resetIsInvalid()) },
+		getPublicationsFiltered: (publications) => { dispatch(getPublicationsFiltered(publications)) },
+		savePublicationsDB: (publications) => { dispatch(savePublicationsDB(publications)) },
     }
 }
 

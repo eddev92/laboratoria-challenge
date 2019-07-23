@@ -18,6 +18,7 @@ export const defaultValues = {
     privacity: 1
   },
   publications: [],
+  publicationsDB: [],
   publicationSelected: false,
   messageForPublicationSelected: '',
   privacityForPublicationSelected: '',

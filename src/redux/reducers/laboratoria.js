@@ -12,7 +12,8 @@ const laboratoria = (state = defaultState, action) => {
         isLoading: true,
         invalidPassword: (state.user.userName !== 'laboratoria' && state.user.password !== 'laboratoria123') ? true : false,
         isValid: ((action.user === 'laboratoria' && action.password === 'laboratoria123') ||
-         (state.user.userName === 'laboratoria' && state.user.password === 'laboratoria123')) ? true : false
+         (state.user.userName === 'laboratoria' && state.user.password === 'laboratoria123')) ? true : false,
+        publicationsDB: action.publicationsLoaded
       }
     }
     case LOGIN_ACTION.LOGIN_ACTION_HANDLE_USER_INFO: {
@@ -85,7 +86,8 @@ const laboratoria = (state = defaultState, action) => {
         ...state,
         publications: auxPublications,
         publicationSelected: !(state.publicationSelected && state.editActive) ? false : true,
-        editActive: !(state.publicationSelected && state.editActive) ? false : true
+        editActive: (!(state.publicationSelected && state.editActive) || ((state.publication.message === action.publication.message) && (state.publication.privacity === action.publication.privacity))) ? false : true,
+        messageForPublicationSelected: ((state.publication.message === action.publication.message) && (state.publication.privacity === action.publication.privacity)) ? '' : state.messageForPublicationSelected,
       }
     }
     case HOME_ACTION.HOME_ACTION_EDIT_PUBLICATION: {
@@ -187,18 +189,18 @@ const laboratoria = (state = defaultState, action) => {
       editActive: false
     }
   case RESET_ACTION.INPUT_VALUES:
-  return {
-    ...state,
-    editActive: false,
-    publicationMessage: '',
-    messageForPublicationSelected: '',
-    optionSelected: 1
-  }
-case RESET_ACTION.RESET_ACTION_RESET_LOGIN_VALIDATION: {
-  const userReset = {
-    userName: '',
-    password: ''
-  }
+    return {
+      ...state,
+      editActive: false,
+      publicationMessage: '',
+      messageForPublicationSelected: '',
+      optionSelected: 1
+    }
+  case RESET_ACTION.RESET_ACTION_RESET_LOGIN_VALIDATION: {
+    const userReset = {
+      userName: '',
+      password: ''
+    }
   return {
     ...state,
     isValid: false,
@@ -207,11 +209,27 @@ case RESET_ACTION.RESET_ACTION_RESET_LOGIN_VALIDATION: {
     publications: []
   }
 }
-case RESET_ACTION.RESET_ACTION_RESET_IS_INVALID:
-  return {
-    ...state,
-    invalidPassword: true,
-    isLoading: false
+  case RESET_ACTION.RESET_ACTION_RESET_IS_INVALID:
+    return {
+      ...state,
+      invalidPassword: true,
+      isLoading: false
+    }
+  case HOME_ACTION.HOME_ACTION_GET_PUBLICATIONS_FILTERED: {
+    let aux = [];
+    aux = action.publications;
+    return {
+      ...state,
+      publications: aux.reverse()
+    }
+  }
+  case HOME_ACTION.HOME_ACTION_SAVE_PUBLICATIONS_DB: {
+    let aux = [];
+    aux = [ ...action.publications ];
+    return {
+      ...state,
+      publicationsDB: aux.reverse()
+    }
   }
     default:
       return state
