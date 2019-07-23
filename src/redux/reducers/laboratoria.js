@@ -1,5 +1,5 @@
 import { LOGIN_ACTION, HOME_ACTION, RESET_ACTION } from "../../constants/actions";
-import { defaultValues } from "../../constants/constants";
+import { defaultValues, USER_CREDENTIALS } from "../../constants/constants";
 
 let defaultState = defaultValues;
 
@@ -10,9 +10,9 @@ const laboratoria = (state = defaultState, action) => {
         ...state,
         user: state.user,
         isLoading: true,
-        invalidPassword: (state.user.userName !== 'laboratoria' && state.user.password !== 'laboratoria123') ? true : false,
-        isValid: ((action.user === 'laboratoria' && action.password === 'laboratoria123') ||
-         (state.user.userName === 'laboratoria' && state.user.password === 'laboratoria123')) ? true : false,
+        invalidPassword: (state.user.userName !== USER_CREDENTIALS.userName && state.user.password !== USER_CREDENTIALS.password) ? true : false,
+        isValid: ((action.user === USER_CREDENTIALS.userName && action.password === USER_CREDENTIALS.password) ||
+         (state.user.userName === USER_CREDENTIALS.userName && state.user.password === USER_CREDENTIALS.password)) ? true : false,
         publicationsDB: action.publicationsLoaded
       }
     }
